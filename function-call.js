@@ -1,7 +1,7 @@
 var library = require("nrtv-library")(require)
 
 module.exports = library.export(
-  "function-call",
+  "nrtv-function-call",
   function() {
 
     function BoundFunc(func, identifier, dependencies, args) {
@@ -12,7 +12,6 @@ module.exports = library.export(
         dependencies: dependencies || [],
         args: args || [],
       }
-      debugger
       return this
     }
 
