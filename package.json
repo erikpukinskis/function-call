@@ -1,6 +1,6 @@
 {
   "name": "nrtv-function-call",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Build code that defines and calls functions in the browser",
   "main": "function-call.js",
   "repository": {
