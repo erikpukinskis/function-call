@@ -8,7 +8,7 @@ module.exports = library.export(
       this.binding = {
         __BrowserBridgeBinding: true,
         func: func,
-        identifier: identifier || (func && func.name),
+        identifier: identifier || (func && (func.name || func)),
         dependencies: dependencies || [],
         args: args || [],
       }

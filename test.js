@@ -78,4 +78,15 @@ test.using(
 
 
 
+test.using(
+  "pass a string that evaluates to the function",
+  ["./"],
+  function(expect, done, functionCall) {
+    var call = functionCall("some.thing.weird")
+
+    expect(call.evalable()).to.equal("some.thing.weird()")
+
+    done()
+  }
+)
 

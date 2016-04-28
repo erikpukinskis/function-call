@@ -1,11 +1,11 @@
 {
-  "name": "nrtv-function-call",
-  "version": "0.2.0",
-  "description": "Build code that defines and calls functions in the browser",
+  "name": "function-call",
+  "version": "0.3.0",
+  "description": "build code that defines and calls functions in the browser",
   "main": "function-call.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/erikpukinskis/nrtv-function-call.git"
+    "url": "https://github.com/erikpukinskis/function-call.git"
   },
   "scripts": {
     "test": "node test.js"
