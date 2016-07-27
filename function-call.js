@@ -1,5 +1,6 @@
 if (require) {
-  module.exports = generator()
+  var functionCall = generator()
+  module.exports = functionCall.generator = generator
 } else {
   var functionCall = generator()
 }
@@ -103,7 +104,7 @@ function generator() {
       }
 
       for(var i=0; i<this.binding.args.length; i++) {
-
+        
         var arg = this.binding.args[i]
 
         var isBinding = arg && arg.binding && arg.binding.__BrowserBridgeBinding
