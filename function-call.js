@@ -1,6 +1,7 @@
 if (require) {
   var functionCall = generator()
-  module.exports = functionCall.generator = generator
+  functionCall.generator = generator
+  module.exports = functionCall
 } else {
   var functionCall = generator()
 }
