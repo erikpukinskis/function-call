@@ -13,7 +13,7 @@ test.using(
         functionCall.raw("event")
       )
 
-    expect(call.evalable()).to.equal("greet(\"string\",event)")
+    expect(call.evalable()).to.equal("greet(\"string\", event)")
 
     done()
   }
@@ -70,7 +70,7 @@ test.using(
 
     var source = boundFunction.withArgs(undefined, {}).evalable()
 
-    expect(source).to.contain("undefined,{}")
+    expect(source).to.contain("undefined, {}")
 
     done()
   }
@@ -85,6 +85,19 @@ test.using(
     var call = functionCall("some.thing.weird")
 
     expect(call.evalable()).to.equal("some.thing.weird()")
+
+    done()
+  }
+)
+
+
+test.using(
+  "method calls",
+  ["./"],
+  function(expect, done, functionCall) {
+    var call = functionCall(greet).methodCall("toString").withArgs(5)
+
+    expect(call.evalable()).to.equal("greet.toString(5)")
 
     done()
   }

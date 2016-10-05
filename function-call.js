@@ -17,6 +17,11 @@ function generator() {
     return this
   }
 
+  BoundFunc.prototype.methodCall = function(methodName) {
+    var identifier = this.callable()+"."+methodName
+    return new BoundFunc(null, identifier)
+  }
+
   BoundFunc.prototype.withArgs =
     function() {
       var args = Array.prototype.slice.call(arguments)
@@ -129,7 +134,7 @@ function generator() {
         deps.push(source)
       }
 
-      return deps.length ? deps.join(",") : ""
+      return deps.length ? deps.join(", ") : ""
   }
 
   BoundFunc.prototype.evalable =
@@ -165,7 +170,7 @@ function generator() {
   }
 
   functionCall.defineOn = function(bridge) {
-    return bridge.defineFunction(generator)
+    return bridge.defineSingleton("functionCall", generator)
   }
 
   return functionCall
