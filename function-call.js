@@ -164,6 +164,10 @@ function generator() {
     }
   }
 
+  functionCall.defineOn = function(bridge) {
+    return bridge.defineFunction(generator)
+  }
+
   return functionCall
 }
 
