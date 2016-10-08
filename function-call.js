@@ -7,13 +7,20 @@ if (require) {
 function generator() {
 
   function BoundFunc(func, identifier, dependencies, args) {
+
+
     this.binding = {
       __BrowserBridgeBinding: true,
       func: func,
-      identifier: identifier || (func && (func.name || func)),
+      identifier: identifier || (func && func.name) || func,
       dependencies: dependencies || [],
       args: args || [],
     }
+
+    if (typeof this.binding.identifier == "function") {
+      throw new Error("Did you pass an unnamed function to functionCall or something?")
+    }
+    
     return this
   }
 
@@ -71,6 +78,7 @@ function generator() {
 
   BoundFunc.prototype.callable =
     function() {
+
       if (this.isGenerator) {
         return this.binding.identifier
       }
@@ -81,7 +89,15 @@ function generator() {
         return this.binding.identifier
       }
 
-      return this.binding.identifier+".bind(null,"+arguments+")"
+      var parts = this.binding.identifier.split(".")
+      var scope = parts[0]
+
+      return this.binding.identifier
+        +".bind("
+        +scope
+        +", "
+        +arguments
+        +")"
     }
 
   BoundFunc.prototype.argumentString = function() {

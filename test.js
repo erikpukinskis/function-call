@@ -4,6 +4,8 @@ function greet(name) {
   alert("hi, "+name)
 }
 
+// test.only("pass a string that evaluates to the function")
+
 test.using(
   "raw arguments",
   ["./"],
@@ -49,7 +51,7 @@ test.using(
   ["./"],
   function(expect, done, functionCall) {
 
-    var boundFunction = functionCall(function() {})
+    var boundFunction = functionCall("program")
 
     var source = boundFunction.withArgs({a: 2, b: "hello", c: [1,"hi"]}).evalable()
 
@@ -103,3 +105,20 @@ test.using(
   }
 )
 
+
+
+test.using(
+  "bind methods to their instance",
+  ["./"],
+  function(expect, done, functionCall) {
+
+    var singleton = functionCall(function program() {})
+    singleton.isGenerator = true
+
+    var source = singleton.methodCall("getProperty").withArgs(true).callable()
+
+    expect(source).to.equal("program.getProperty.bind(program, true)")
+
+    done()
+  }
+)
