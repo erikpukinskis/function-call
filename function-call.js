@@ -100,8 +100,9 @@ function generator() {
         +")"
     }
 
-  BoundFunc.prototype.argumentString = function() {
+  BoundFunc.prototype.argumentString = function(options) {
 
+      var expandJson = !!(options && options.expand)
       var deps = []
 
       for(var i=0; i<this.binding.dependencies.length; i++) {
@@ -144,7 +145,7 @@ function generator() {
         } else if (rawCode) {
           source = rawCode
         } else {
-          source = JSON.stringify(arg)
+          source = JSON.stringify(arg, null, expandJson ? 2 : null)
         }
 
         deps.push(source)
@@ -154,8 +155,8 @@ function generator() {
   }
 
   BoundFunc.prototype.evalable =
-    function() {
-      return this.binding.identifier+"("+this.argumentString()+")"
+    function(options) {
+      return this.binding.identifier+"("+this.argumentString(options)+")"
     }
 
   // Gives you a JSON object that, if sent to the client, causes the function to be called with the args:
