@@ -25,7 +25,7 @@ function generator() {
   }
 
   BoundFunc.prototype.methodCall = function(methodName) {
-    var identifier = this.callable()+"."+methodName
+    var identifier = (this.isGenerator ? this.callable() : this.evalable())+"."+methodName
     return new BoundFunc(null, identifier)
   }
 

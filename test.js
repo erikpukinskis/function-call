@@ -99,7 +99,7 @@ test.using(
   function(expect, done, functionCall) {
     var call = functionCall(greet).methodCall("toString").withArgs(5)
 
-    expect(call.evalable()).to.equal("greet.toString(5)")
+    expect(call.evalable()).to.equal("greet().toString(5)")
 
     done()
   }
@@ -108,7 +108,7 @@ test.using(
 
 
 test.using(
-  "bind methods to their instance",
+  "bind methods to their instance if it's a generator",
   ["./"],
   function(expect, done, functionCall) {
 
@@ -122,3 +122,4 @@ test.using(
     done()
   }
 )
+
