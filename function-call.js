@@ -8,6 +8,9 @@ function generator() {
 
   function BoundFunc(func, identifier, dependencies, args) {
 
+    if (typeof func == "undefined") {
+      throw new Error("Passed nothing to functionCall()")
+    }
 
     this.binding = {
       __BrowserBridgeBinding: true,
