@@ -8,10 +8,6 @@ function generator() {
 
   function BoundFunc(func, identifier, dependencies, args) {
 
-    if (typeof func == "undefined") {
-      throw new Error("Passed nothing to functionCall()")
-    }
-
     this.binding = {
       __BrowserBridgeBinding: true,
       func: func,
@@ -45,11 +41,19 @@ function generator() {
   BoundBinding.prototype.callable = function() {
     var binding = this.boundFunc.binding
     var source = "functionCall(\""+binding.identifier+"\")"
+    var anyArgs = binding.args.length > 0
+    var anyDepsOrArgs = binding.dependencies.length + binding.args.length > 0
 
-    var anyDeps = binding.dependencies.length + binding.args.length > 0
 
-    if (anyDeps) {
-      source += ".withArgs("+this.boundFunc.argumentString()
+    if (this.boundFunc.isGenerator) {
+      if (anyArgs) {
+        source += "("+binding.args.map(toCallable).join(", ")+")"
+      }
+      source += ".singleton()"
+    } else {
+      if (anyDepsOrArgs) {
+        source += ".withArgs("+this.boundFunc.argumentString()+")"
+      }
     }
 
     return source
@@ -172,34 +176,38 @@ function generator() {
         }
       }
 
-      for(var i=0; i<this.binding.args.length; i++) {
-        
-        var arg = this.binding.args[i]
-
-        var isBinding = arg && arg.binding && arg.binding.__BrowserBridgeBinding
-
-        var isFunction = typeof arg == "function"
-
-        var rawCode = arg && arg.__nrtvFunctionCallRawCode
-
-        if (typeof arg == "undefined") {
-          var source = "undefined"
-        } else if (arg === null) {
-          source = "null"
-        } else if (isBinding) {
-          source = arg.callable()
-        } else if (isFunction) {
-          source = arg.toString()
-        } else if (rawCode) {
-          source = rawCode
-        } else {
-          source = JSON.stringify(arg, null, expandJson ? 2 : null)
+      this.binding.args.forEach(
+        function(arg) {
+          deps.push(toCallable(arg, expandJson))
         }
-
-        deps.push(source)
-      }
+      )
 
       return deps.length ? deps.join(", ") : ""
+  }
+
+  function toCallable(arg, expandJson) {
+  
+    var isBinding = arg && arg.binding && arg.binding.__BrowserBridgeBinding
+
+    var isFunction = typeof arg == "function"
+
+    var rawCode = arg && arg.__nrtvFunctionCallRawCode
+
+    if (typeof arg == "undefined") {
+      var source = "undefined"
+    } else if (arg === null) {
+      source = "null"
+    } else if (isBinding) {
+      source = arg.callable()
+    } else if (isFunction) {
+      source = arg.toString()
+    } else if (rawCode) {
+      source = rawCode
+    } else {
+      source = JSON.stringify(arg, null, expandJson ? 2 : null)
+    }
+
+    return source
   }
 
   BoundFunc.prototype.evalable =
@@ -219,13 +227,19 @@ function generator() {
     }
 
   function functionCall() {
-    var args = arguments
-    function Baked() {
-      BoundFunc.apply(this, args)
+
+    for(var i=0; i<arguments.length; i++) {
+      var arg = arguments[i]
+      if (typeof arg == "function") {
+        var func = arg
+      } else if (typeof arg == "string") {
+        var identifier = arg
+      } else if (Array.isArray(arg)) {
+        var dependencies = arg
+      }
     }
-    Baked.prototype = BoundFunc.prototype
-    var instance = new Baked
-    return instance
+
+    return new BoundFunc(func, identifier, dependencies)
   }
 
   functionCall.raw = function(code) {

@@ -174,11 +174,33 @@ test.using(
 
     var program = functionCall(function program() {}).asBinding()
 
-    expect(program.evalable()).to.equal("functionCall(\"program\")")
+    expect(program.callable()).to.equal("functionCall(\"program\")")
 
     done()
   }
 )
+
+
+
+
+test.using(
+  "singletons don't drag along dependencies",
+  ["./"],
+  function(expect, done, functionCall) {
+
+    var otherBinding = functionCall(function foo() {})
+
+    var program = functionCall("program", [otherBinding]).singleton().asBinding()
+
+    expect(program.callable()).to.equal("functionCall(\"program\").singleton()")
+
+    done()
+  }
+)
+
+
+
+
 
 
 
