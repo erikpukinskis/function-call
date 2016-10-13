@@ -4,8 +4,6 @@ function greet(name) {
   alert("hi, "+name)
 }
 
-// test.only("pass a string that evaluates to the function")
-
 test.using(
   "raw arguments",
   ["./"],
@@ -122,4 +120,37 @@ test.using(
     done()
   }
 )
+
+
+
+test.using(
+  "don't bind functions to themselves",
+  ["./"],
+  function(expect, done, functionCall) {
+    var source = functionCall(
+      function foo() {}
+    ).withArgs(true).callable()
+
+    expect(source).to.equal("foo.bind(null, true)")
+
+    done()
+  }
+)
+
+
+
+test.using(
+  "keeping bindings as bindings",
+  ["./"],
+  function(expect, done, functionCall) {
+
+    var program = functionCall(function program() {}).asBinding()
+
+    expect(program.evalable()).to.equal("functionCall(\"program\")")
+
+    done()
+  }
+)
+
+
 

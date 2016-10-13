@@ -32,6 +32,28 @@ function generator() {
     return new BoundFunc(null, identifier)
   }
 
+  BoundFunc.prototype.asBinding =
+    function() {
+      return new BoundBinding(this)
+    }
+
+  function BoundBinding(boundFunc) {
+    this.boundFunc = boundFunc
+  }
+
+  BoundBinding.prototype.evalable = function() {
+    var binding = this.boundFunc.binding
+    var source = "functionCall(\""+binding.identifier+"\")"
+
+    var anyDeps = binding.dependencies.length + binding.args.length > 0
+
+    if (anyDeps) {
+      source += ".withArgs("+this.boundFunc.argumentString()
+    }
+
+    return source
+  }
+
   BoundFunc.prototype.withArgs =
     function() {
       var args = Array.prototype.slice.call(arguments)
@@ -93,7 +115,11 @@ function generator() {
       }
 
       var parts = this.binding.identifier.split(".")
-      var scope = parts[0]
+      if (parts.length > 1) {
+        var scope = parts[0]
+      } else {
+        var scope = "null"
+      }
 
       return this.binding.identifier
         +".bind("
