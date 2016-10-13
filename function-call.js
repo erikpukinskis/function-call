@@ -41,7 +41,8 @@ function generator() {
     this.boundFunc = boundFunc
   }
 
-  BoundBinding.prototype.evalable = function() {
+
+  BoundBinding.prototype.callable = function() {
     var binding = this.boundFunc.binding
     var source = "functionCall(\""+binding.identifier+"\")"
 
