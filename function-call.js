@@ -54,17 +54,31 @@ function generator() {
     return source
   }
 
+  function clone(binding) {
+    return new BoundFunc(
+      binding.func,
+      binding.identifier,
+      binding.dependencies,
+      [].concat(binding.args)
+    )
+  }
+
   BoundFunc.prototype.withArgs =
     function() {
       var args = Array.prototype.slice.call(arguments)
 
-      return new BoundFunc(
-        this.binding.func,
-        this.binding.identifier,
-        this.binding.dependencies,
-        [].concat(this.binding.args, args)
-      )
+      var newCall = clone(this.binding)
+
+      newCall.binding.args = newCall.binding.args.concat(args)
+
+      return newCall
     }
+
+  BoundFunc.prototype.singleton = function() {
+    var singleton = clone(this.binding)
+    singleton.isGenerator = true
+    return singleton
+  }
 
   BoundFunc.prototype.source =
     function() {
@@ -114,9 +128,13 @@ function generator() {
         return this.binding.identifier
       }
 
-      var parts = this.binding.identifier.split(".")
-      if (parts.length > 1) {
-        var scope = parts[0]
+
+      var pattern = /(.+)[.]([a-zA-Z0-9_-]+)$/
+
+      var method = this.binding.identifier.match(pattern)
+
+      if (method) {
+        var scope = method[1]
       } else {
         var scope = "null"
       }

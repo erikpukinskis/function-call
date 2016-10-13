@@ -140,6 +140,34 @@ test.using(
 
 
 test.using(
+  "don't bind chained functions to instances way back in the chain",
+  ["./"],
+  function(expect, done, functionCall) {
+    var source = functionCall("library.get(\"foo\")").withArgs(true).callable()
+
+    expect(source).to.equal("library.get(\"foo\").bind(null, true)")
+
+    done()
+  }
+)
+
+
+
+test.using(
+  "bind deep methods",
+  ["./"],
+  function(expect, done, functionCall) {
+    var source = functionCall("library").singleton().methodCall("get").withArgs("foo").methodCall("sass").withArgs(false).callable()
+
+    expect(source).to.equal("library.get(\"foo\").sass.bind(library.get(\"foo\"), false)")
+
+    done()
+  }
+)
+
+
+
+test.using(
   "keeping bindings as bindings",
   ["./"],
   function(expect, done, functionCall) {
