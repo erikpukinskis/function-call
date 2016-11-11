@@ -9,12 +9,13 @@ function generator() {
   function BoundFunc(func, identifier, dependencies, args) {
 
     this.binding = {
-      __isFunctionCallBinding: true,
       func: func,
       identifier: identifier || (func && func.name) || func,
       dependencies: dependencies || [],
       args: args || [],
     }
+
+    this.__isFunctionCallBinding = true
 
     if (typeof this.binding.identifier == "function") {
       throw new Error("Did you pass an unnamed function to functionCall or something?")
