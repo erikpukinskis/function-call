@@ -18,7 +18,25 @@ test.using(
     done()
   }
 )
-    
+
+
+test.using(
+  "arguments can be function calls",
+
+  ["./"],
+  function(expect, done, functionCall) {
+
+    var shabooya = functionCall("shabooya")
+
+    var withArg = functionCall("foo").withArgs(shabooya)
+
+    expect(withArg.evalable()).to.equal("foo(shabooya)")
+
+    done()
+  }
+)
+
+
 test.using(
   "arguments can be functions",
 
