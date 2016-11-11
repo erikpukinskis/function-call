@@ -9,7 +9,7 @@ function generator() {
   function BoundFunc(func, identifier, dependencies, args) {
 
     this.binding = {
-      __BrowserBridgeBinding: true,
+      __isFunctionCallBinding: true,
       func: func,
       identifier: identifier || (func && func.name) || func,
       dependencies: dependencies || [],
@@ -187,7 +187,7 @@ function generator() {
 
   function toCallable(arg, expandJson) {
   
-    var isBinding = arg && arg.binding && arg.binding.__BrowserBridgeBinding
+    var isBinding = arg && arg.binding && arg.binding.__isFunctionCallBinding
 
     var isFunction = typeof arg == "function"
 
