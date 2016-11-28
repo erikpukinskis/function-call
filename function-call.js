@@ -86,39 +86,6 @@ function generator() {
     return singleton
   }
 
-  BoundFunc.prototype.source =
-    function() {
-      var source = this.binding.func.toString()
-
-      if (this.isGenerator) {
-
-        if (this.binding.dependencies.length > 0) {
-
-          var callArgs = "null, "+this.argumentString()
-
-        } else {
-          var callArgs = ""
-        }
-
-        source = "var "+this.binding.identifier+" = ("+source+").call("+callArgs+")"
-      } else {
-        source = source.replace(
-          /^function[^(]*\(/,
-          "function "+this.binding.identifier+"("
-        )
-
-        var firstDependency = this.binding.dependencies[0]
-
-        var hasCollective = firstDependency &&firstDependency.__dependencyType == "browser collective"
-
-        if (hasCollective) {
-          source = "var "+this.binding.identifier+" = ("+source+").bind(null,"+JSON.stringify(firstDependency.attributes)+")"
-        }
-      }
-
-      return source
-    }
-
   // Gives you a string that when evaled on the client, would cause the function to be called with the args:
 
   BoundFunc.prototype.callable =
@@ -154,30 +121,18 @@ function generator() {
     }
 
   BoundFunc.prototype.argumentString = function(options) {
+    return argumentString(this.binding.args, options)
+  }
+
+  functionCall.argumentString = argumentString
+
+  function argumentString(args, options) {
 
       var expandJson = !!(options && options.expand)
+
       var deps = []
 
-      for(var i=0; i<this.binding.dependencies.length; i++) {
-
-        var dep = this.binding.dependencies[i]
-
-        var isCollective = dep.__dependencyType == "browser collective"
-
-        if (isCollective) {
-          if (i>0) {
-            throw new Error("You can only use a collective as the first dependency of a browser function. (I know, annoying.) You have library.collective("+JSON.stringify(dep.attributes)+") as the "+i+ "th argument to "+this.binding.key)
-          }
-        } else {
-          if (typeof dep.callable != "function") {
-            throw new Error("You passed "+JSON.stringify(dep)+" as a dependency to "+this.key+" but it needs to either be a collective or a function or have a .callable() method.")
-          }
-
-          deps.push(dep.callable())
-        }
-      }
-
-      this.binding.args.forEach(
+      args.forEach(
         function(arg) {
           deps.push(toCallable(arg, expandJson))
         }
