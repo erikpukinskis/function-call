@@ -143,7 +143,7 @@ function generator() {
 
   function toCallable(arg, expandJson) {
   
-    var isBinding = arg && arg.binding && arg.__isFunctionCallBinding
+    var isBinding = arg && arg.__isFunctionCallBinding
 
     var isFunction = typeof arg == "function"
 
