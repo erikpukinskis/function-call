@@ -1,5 +1,5 @@
 if (require) {
-  module.exports = require("nrtv-library")(require).export("function-call", generator)
+  module.exports = require("module-library")(require).export("function-call", generator)
 } else {
   var functionCall = generator()
 }

@@ -8,13 +8,13 @@
     "url": "https://github.com/erikpukinskis/function-call.git"
   },
   "dependencies": {
-    "nrtv-library": "*"
+    "module-library": "*"
   },
   "scripts": {
     "test": "node test.js"
   },
   "devDependencies": {
-    "nrtv-test": "*"
+    "run-test": "*"
   },
   "license": "ISC"
 }

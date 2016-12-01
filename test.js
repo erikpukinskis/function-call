@@ -1,10 +1,10 @@
-var test = require("nrtv-test")(require)
+var runTest = require("run-test")(require)
 
 function greet(name) {
   alert("hi, "+name)
 }
 
-test.using(
+runTest(
   "raw arguments",
   ["./"],
   function(expect, done, functionCall) {
@@ -20,7 +20,7 @@ test.using(
 )
 
 
-test.using(
+runTest(
   "arguments can be function calls",
 
   ["./"],
@@ -37,7 +37,7 @@ test.using(
 )
 
 
-test.using(
+runTest(
   "arguments can be functions",
 
   ["./"],
@@ -61,7 +61,7 @@ test.using(
 )
 
 
-test.using(
+runTest(
   "arguments can be objects",
 
   ["./"],
@@ -78,7 +78,7 @@ test.using(
 )
 
 
-test.using(
+runTest(
   "arguments can be undefined",
 
   ["./"],
@@ -96,7 +96,7 @@ test.using(
 
 
 
-test.using(
+runTest(
   "pass a string that evaluates to the function",
   ["./"],
   function(expect, done, functionCall) {
@@ -109,7 +109,7 @@ test.using(
 )
 
 
-test.using(
+runTest(
   "method calls",
   ["./"],
   function(expect, done, functionCall) {
@@ -123,7 +123,7 @@ test.using(
 
 
 
-test.using(
+runTest(
   "bind methods to their instance if it's a generator",
   ["./"],
   function(expect, done, functionCall) {
@@ -141,7 +141,7 @@ test.using(
 
 
 
-test.using(
+runTest(
   "don't bind functions to themselves",
   ["./"],
   function(expect, done, functionCall) {
@@ -157,7 +157,7 @@ test.using(
 
 
 
-test.using(
+runTest(
   "don't bind chained functions to instances way back in the chain",
   ["./"],
   function(expect, done, functionCall) {
@@ -171,7 +171,7 @@ test.using(
 
 
 
-test.using(
+runTest(
   "bind deep methods",
   ["./"],
   function(expect, done, functionCall) {
@@ -185,7 +185,7 @@ test.using(
 
 
 
-test.using(
+runTest(
   "keeping bindings as bindings",
   ["./"],
   function(expect, done, functionCall) {
@@ -201,7 +201,7 @@ test.using(
 
 
 
-test.using(
+runTest(
   "singletons don't drag along dependencies",
   ["./"],
   function(expect, done, functionCall) {
