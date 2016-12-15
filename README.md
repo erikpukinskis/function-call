@@ -2,21 +2,25 @@
 
 ```javascript
 var functionCall = require("function-call")
+
 var build = functionCall("buildTemple").withArgs({height: "30 cubits"})
-build.evalable() // 'buildTemple({"height":"30 cubits"})'
+build.evalable()
+// 'buildTemple({"height":"30 cubits"})'
 ```
 
 You can also keep tacking more arguments on to a function call. Arguments can be literals or other function calls:
 
 ```javascript
 var moveIn = functionCall("moveIn").withArgs("Tuesday")
-build.withArgs(moveIn).evalable() // 'buildTemple({"height":"30 cubits"}, moveIn.bind(null, "Tuesday"))'
+build.withArgs(moveIn).evalable()
+// 'buildTemple({"height":"30 cubits"}, moveIn.bind(null, "Tuesday"))'
 ```
 
 If you want to pass the call to another function as a callback, use callable() instead of evalable():
 
 ```javascript
-build.callable() // 'buildTemple.bind(null, {"height":"30 cubits"})'
+build.callable()
+// 'buildTemple.bind(null, {"height":"30 cubits"})'
 ```
 
 ## Singletons and methods
@@ -25,8 +29,8 @@ If you want to reference an object or its methods:
 
 ```javascript
 var me = functionCall("me").singleton()
-
-me.methodCall("getName").withArgs("formal").evalable() // me.getName("formal")
+me.methodCall("getName").withArgs("formal").evalable()
+// 'me.getName("formal")'
 ```
 
 ## These bindings are getting out of hand, what do I do?
@@ -55,8 +59,11 @@ var c = bridge.defineFunction(
 This will pre-bind a, b, b's args, and your data into a reference called c, so that you get a nice clear function call:
 
 ```javascript
-c.withArgs("goats").evalable() // `c("goats")`
+c.withArgs("goats").evalable()
+// 'c("goats")'
 ```
+
+When you eval that, `a` will be called, `b` will be called with 4000, and you'll get "datagoats" back.
 
 ## Why?
 
