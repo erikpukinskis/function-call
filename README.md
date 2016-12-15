@@ -1,4 +1,4 @@
-**FunctionCall** allows you to build JavaScript strings that do stuff. It's convenient for creating an onclick handler:
+**function-call** allows you to build JavaScript strings that do stuff. It's convenient for creating an onclick handler:
 
 ```javascript
 var functionCall = require("function-call")
