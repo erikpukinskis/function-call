@@ -128,8 +128,7 @@ runTest(
   ["./"],
   function(expect, done, functionCall) {
 
-    var singleton = functionCall(function program() {})
-    singleton.isGenerator = true
+    var singleton = functionCall(function program() {}).singleton()
 
     var source = singleton.methodCall("getProperty").withArgs(true).callable()
 
