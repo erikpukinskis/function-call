@@ -2,7 +2,6 @@
 
 ```javascript
 var functionCall = require("function-call")
-
 var build = functionCall("buildTemple").withArgs({height: "30 cubits"})
 
 build.evalable() // 'buildTemple({"height":"30 cubits"})'
