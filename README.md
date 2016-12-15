@@ -3,7 +3,6 @@
 ```javascript
 var functionCall = require("function-call")
 var build = functionCall("buildTemple").withArgs({height: "30 cubits"})
-
 build.evalable() // 'buildTemple({"height":"30 cubits"})'
 ```
 
@@ -11,7 +10,6 @@ You can also keep tacking more arguments on to a function call. Arguments can be
 
 ```javascript
 var moveIn = functionCall("moveIn").withArgs("Tuesday")
-
 build.withArgs(moveIn).evalable() // 'buildTemple({"height":"30 cubits"}, moveIn.bind(null, "Tuesday"))'
 ```
 
