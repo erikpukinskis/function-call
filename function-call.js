@@ -144,10 +144,10 @@ function generator() {
   function toCallable(arg, expandJson) {
   
     var isBinding = arg && arg.__isFunctionCallBinding
-
     var isFunction = typeof arg == "function"
+    var isRawCode = arg && typeof arg.__nrtvFunctionCallRawCode == "string"
+    var isObject = !isBinding && !isRawCode && typeof arg == "object"
 
-    var rawCode = arg && arg.__nrtvFunctionCallRawCode
 
     if (typeof arg == "undefined") {
       var source = "undefined"
@@ -157,14 +157,45 @@ function generator() {
       source = arg.callable()
     } else if (isFunction) {
       source = arg.toString()
-    } else if (rawCode) {
-      source = rawCode
+    } else if (isRawCode) {
+      source = arg.__nrtvFunctionCallRawCode
+    } else if (isObject) {
+      source = objectToSource(arg, expandJson)
     } else {
       source = JSON.stringify(arg, null, expandJson ? 2 : null)
     }
 
     return source
   }
+
+  function objectToSource(arg, expandJson) {
+
+    var keyPairStrings = Object.keys(arg).map(toPairString)
+
+    function toPairString(key) {
+      var value = arg[key]
+
+      if (value && value.__isFunctionCallBinding) {
+        var valueString = toCallable(value, expandJson)
+      } else {
+        var valueString = JSON.stringify(value)
+      }
+
+      return JSON.stringify(key)+":"+valueString
+    }
+
+    var keyPairSource = keyPairStrings.join(expandJson ? ",\n" : ", ")
+
+    if (expandJson) {
+      keyPairSource += "\n"
+    }
+
+    var openBracket = "{"+(expandJson ? "\n" : "")
+    var closeBracket = "}"
+
+    return openBracket+keyPairSource+closeBracket
+  }
+
 
   BoundFunc.prototype.evalable =
     function(options) {

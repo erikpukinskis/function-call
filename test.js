@@ -4,6 +4,7 @@ function greet(name) {
   alert("hi, "+name)
 }
 
+
 runTest(
   "raw arguments",
   ["./"],
@@ -215,6 +216,21 @@ runTest(
   }
 )
 
+
+runTest(
+  "function calls can be object attributes",
+  ["./"],
+  function(expect, done, functionCall) {
+
+    var someFunctionCall = functionCall("foo")
+
+    var consumer = functionCall("consumer")
+
+    expect(consumer.withArgs({func: someFunctionCall}).evalable()).to.equal("consumer({\"func\":foo})")
+
+    done()
+  }
+)
 
 
 
