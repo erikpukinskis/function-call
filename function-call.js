@@ -148,7 +148,6 @@ function generator() {
     var isRawCode = arg && typeof arg.__nrtvFunctionCallRawCode == "string"
     var isObject = !isBinding && !isRawCode && typeof arg == "object"
 
-
     if (typeof arg == "undefined") {
       var source = "undefined"
     } else if (arg === null) {
@@ -181,16 +180,16 @@ function generator() {
         var valueString = JSON.stringify(value)
       }
 
-      return JSON.stringify(key)+":"+valueString
+      return JSON.stringify(key)+": "+valueString
     }
 
-    var keyPairSource = keyPairStrings.join(expandJson ? ",\n" : ", ")
+    var keyPairSource = keyPairStrings.join(expandJson ? ",\n  " : ", ")
 
     if (expandJson) {
       keyPairSource += "\n"
     }
 
-    var openBracket = "{"+(expandJson ? "\n" : "")
+    var openBracket = "{"+(expandJson ? "\n  " : "")
     var closeBracket = "}"
 
     return openBracket+keyPairSource+closeBracket

@@ -72,7 +72,7 @@ runTest(
 
     var source = boundFunction.withArgs({a: 2, b: "hello", c: [1,"hi"]}).evalable()
 
-    expect(source).to.contain("\"a\":2")
+    expect(source).to.contain("\"a\": 2")
 
     done()
   }
@@ -226,7 +226,7 @@ runTest(
 
     var consumer = functionCall("consumer")
 
-    expect(consumer.withArgs({func: someFunctionCall}).evalable()).to.equal("consumer({\"func\":foo})")
+    expect(consumer.withArgs({func: someFunctionCall}).evalable()).to.equal("consumer({\"func\": foo})")
 
     done()
   }
