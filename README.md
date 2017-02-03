@@ -16,13 +16,6 @@ build.withArgs(moveIn).evalable()
 // 'buildTemple({"height":"30 cubits"}, moveIn.bind(null, "Tuesday"))'
 ```
 
-If you want to pass the call to another function as a callback, use callable() instead of evalable():
-
-```javascript
-build.callable()
-// 'buildTemple.bind(null, {"height":"30 cubits"})'
-```
-
 ## Singletons and methods
 
 If you want to reference an object or its methods:
@@ -70,16 +63,15 @@ When you eval that, `a` will be called, `b` will be called with 4000, and you'll
 Sometimes you want to use a bridge function again in response to a javascript event or something. Use .asBinding() to get a binding of the binding, so to speak.
 
 ```javascript
-var sayHi = bridge.defineFunction(
-  function(name) {
-    alert("wuzzup "+name)
-  })
+var sayHi = bridge.defineFunction(function(name) {
+  alert("wuzzup "+name)
+})
 
 bridge.defineFunction(
   [sayHi.asBinding()],
   function(sayHi) {
     var name = askTheSpiritsBeyond.whoAmi()
-    sayHi(name)
+    someElement.onclick = sayHi.withArgs(name).evalable()
   }
 )
 ```
