@@ -1,15 +1,11 @@
 var runTest = require("run-test")(require)
 
-function greet(name) {
-  alert("hi, "+name)
-}
-
 
 runTest(
   "raw arguments",
   ["./"],
   function(expect, done, functionCall) {
-    var call = functionCall(greet).withArgs(
+    var call = functionCall("greet").withArgs(
         "string",
         functionCall.raw("event")
       )
@@ -39,23 +35,17 @@ runTest(
 
 
 runTest(
-  "arguments can be functions",
+  "arguments can other function calls",
 
   ["./"],
   function(expect, done, functionCall) {
 
-    var takesACallback = functionCall(
-      function callIt(callback) {
-        callback()
-      }
-    )
+    var takesACallback = functionCall("callIt")
 
     var wit = takesACallback
-    .withArgs(function() {
-      alert("shabooya")
-    })
+    .withArgs(functionCall("shabooya"))
 
-    expect(wit.evalable()).to.match(/shabooya/)
+    expect(wit.evalable()).to.equal("callIt(shabooya)")
 
     done()
   }
@@ -85,7 +75,7 @@ runTest(
   ["./"],
   function(expect, done, functionCall) {
 
-    var boundFunction = functionCall(greet)
+    var boundFunction = functionCall("something")
 
     var source = boundFunction.withArgs(undefined, {}).evalable()
 
@@ -114,7 +104,7 @@ runTest(
   "method calls",
   ["./"],
   function(expect, done, functionCall) {
-    var call = functionCall(greet).methodCall("toString").withArgs(5)
+    var call = functionCall("greet").methodCall("toString").withArgs(5)
 
     expect(call.evalable()).to.equal("greet().toString(5)")
 
@@ -125,11 +115,11 @@ runTest(
 
 
 runTest(
-  "bind methods to their instance if it's a generator",
+  "bind methods to their instance if call is flagged as a singleton",
   ["./"],
   function(expect, done, functionCall) {
 
-    var singleton = functionCall(function program() {}).singleton()
+    var singleton = functionCall("program").singleton()
 
     var source = singleton.methodCall("getProperty").withArgs(true).callable()
 
@@ -145,9 +135,7 @@ runTest(
   "don't bind functions to themselves",
   ["./"],
   function(expect, done, functionCall) {
-    var source = functionCall(
-      function foo() {}
-    ).withArgs(true).callable()
+    var source = functionCall("foo").withArgs(true).callable()
 
     expect(source).to.equal("foo.bind(null, true)")
 
@@ -190,7 +178,7 @@ runTest(
   ["./"],
   function(expect, done, functionCall) {
 
-    var program = functionCall(function program() {}).asBinding()
+    var program = functionCall("program").asBinding()
 
     expect(program.callable()).to.equal("functionCall(\"program\")")
 
@@ -202,13 +190,13 @@ runTest(
 
 
 runTest(
-  "singletons don't drag along dependencies",
+  "singletons can be passed as bindings",
   ["./"],
   function(expect, done, functionCall) {
 
-    var otherBinding = functionCall(function foo() {})
+    var otherBinding = functionCall("foo")
 
-    var program = functionCall("program", [otherBinding]).singleton().asBinding()
+    var program = functionCall("program").singleton().asBinding()
 
     expect(program.callable()).to.equal("functionCall(\"program\").singleton()")
 

@@ -6,27 +6,27 @@ if (require) {
 
 function generator() {
 
-  function BoundFunc(func, identifier, dependencies, args) {
+  function BoundFunc(identifier, args) {
+
+    if (typeof identifier != "string") {
+      throw new Error("BoundFunc constructor takes an identifier as the first parameter")
+    } else if (typeof args != "undefined" && !Array.isArray(args)) {
+      throw new Error("Second argument to BoundFunc constructor should be an array, or omitted")
+    }
 
     this.binding = {
-      func: func,
-      identifier: identifier || (func && func.name) || func,
-      dependencies: dependencies || [],
-      args: args || [],
+      identifier: identifier,
+      args: [],
     }
 
     this.__isFunctionCallBinding = true
-
-    if (typeof this.binding.identifier == "function") {
-      throw new Error("Did you pass an unnamed function to functionCall or something?")
-    }
     
     return this
   }
 
   BoundFunc.prototype.methodCall = function(methodName) {
     var identifier = (this.isGenerator ? this.callable() : this.evalable())+"."+methodName
-    return new BoundFunc(null, identifier)
+    return new BoundFunc(identifier)
   }
 
   BoundFunc.prototype.asBinding =
@@ -43,7 +43,7 @@ function generator() {
     var binding = this.boundFunc.binding
     var source = "functionCall(\""+binding.identifier+"\")"
     var anyArgs = binding.args.length > 0
-    var anyDepsOrArgs = binding.dependencies.length + binding.args.length > 0
+    var anyDepsOrArgs = binding.args.length > 0
 
 
     if (this.boundFunc.isGenerator) {
@@ -62,9 +62,7 @@ function generator() {
 
   function clone(binding) {
     return new BoundFunc(
-      binding.func,
       binding.identifier,
-      binding.dependencies,
       [].concat(binding.args)
     )
   }
@@ -217,15 +215,15 @@ function generator() {
     for(var i=0; i<arguments.length; i++) {
       var arg = arguments[i]
       if (typeof arg == "function") {
-        var func = arg
+        throw new Error("Don't pass functions to functionCall, just pass a string identifier")
       } else if (typeof arg == "string") {
         var identifier = arg
       } else if (Array.isArray(arg)) {
-        var dependencies = arg
+        throw new Error("Can't pass dependencies to functionCall any more. Use yourCall.withArgs()")
       }
     }
 
-    return new BoundFunc(func, identifier, dependencies)
+    return new BoundFunc(identifier)
   }
 
   functionCall.raw = function(code) {
