@@ -67,7 +67,7 @@ When you eval that, `a` will be called, `b` will be called with 4000, and you'll
 
 ## Using bindings in the browser
 
-Sometimes you want to use a bridge function again in response to a javascript event or something.
+Sometimes you want to use a bridge function again in response to a javascript event or something. Use .asBinding() to get a binding of the binding, so to speak.
 
 ```javascript
 var sayHi = bridge.defineFunction(
