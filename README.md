@@ -65,6 +65,25 @@ c.withArgs("goats").evalable()
 
 When you eval that, `a` will be called, `b` will be called with 4000, and you'll get "datagoats" back.
 
+## Using bindings in the browser
+
+Sometimes you want to use a bridge function again in response to a javascript event or something.
+
+```javascript
+var sayHi = bridge.defineFunction(
+  function(name) {
+    alert("wuzzup "+name)
+  })
+
+bridge.defineFunction(
+  [sayHi.asBinding()],
+  function(sayHi) {
+    var name = askTheSpiritsBeyond.whoAmi()
+    sayHi(name)
+  }
+)
+```
+
 ## Why?
 
 Many JavaScript frameworks don't actually put onclick handlers in the DOM, which means it's difficult to see what happens when a button is pushed. 
