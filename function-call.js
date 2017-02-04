@@ -14,11 +14,8 @@ function generator() {
       throw new Error("Second argument to BoundFunc constructor should be an array, or omitted")
     }
 
-    this.binding = {
-      identifier: identifier,
-      args: args||[],
-    }
-
+    this.identifier = identifier
+    this.args = args||[]
     this.__isFunctionCallBinding = true
     
     return this
@@ -42,20 +39,20 @@ function generator() {
 
 
   BoundBinding.prototype.callable = function() {
-    var binding = this.boundFunc.binding
+    var binding = this.boundFunc
+
     var source = "functionCall(\""+binding.identifier+"\")"
     var anyArgs = binding.args.length > 0
     var anyDepsOrArgs = binding.args.length > 0
 
-
-    if (this.boundFunc.isGenerator) {
+    if (binding.isGenerator) {
       if (anyArgs) {
         source += "("+binding.args.map(toCallable).join(", ")+")"
       }
       source += ".singleton()"
     } else {
       if (anyDepsOrArgs) {
-        source += ".withArgs("+this.boundFunc.argumentString()+")"
+        source += ".withArgs("+binding.argumentString()+")"
       }
     }
 
@@ -71,17 +68,18 @@ function generator() {
 
   BoundFunc.prototype.withArgs =
     function() {
+      debugger
       var args = Array.prototype.slice.call(arguments)
 
-      var newCall = clone(this.binding)
+      var newCall = clone(this)
 
-      newCall.binding.args = newCall.binding.args.concat(args)
+      newCall.args = newCall.args.concat(args)
 
       return newCall
     }
 
   BoundFunc.prototype.singleton = function() {
-    var singleton = clone(this.binding)
+    var singleton = clone(this)
     singleton.isGenerator = true
     return singleton
   }
@@ -92,19 +90,19 @@ function generator() {
     function() {
 
       if (this.isGenerator) {
-        return this.binding.identifier
+        return this.identifier
       }
 
       var arguments = this.argumentString()
 
       if (arguments.length < 1) {
-        return this.binding.identifier
+        return this.identifier
       }
 
 
       var pattern = /(.+)[.]([a-zA-Z0-9_-]+)$/
 
-      var method = this.binding.identifier.match(pattern)
+      var method = this.identifier.match(pattern)
 
       if (method) {
         var scope = method[1]
@@ -112,7 +110,7 @@ function generator() {
         var scope = "null"
       }
 
-      return this.binding.identifier
+      return this.identifier
         +".bind("
         +scope
         +", "
@@ -121,7 +119,7 @@ function generator() {
     }
 
   BoundFunc.prototype.argumentString = function(options) {
-    return argumentString(this.binding.args, options)
+    return argumentString(this.args, options)
   }
 
   functionCall.argumentString = argumentString
@@ -198,7 +196,7 @@ function generator() {
 
   BoundFunc.prototype.evalable =
     function(options) {
-      return this.binding.identifier+"("+this.argumentString(options)+")"
+      return this.identifier+"("+this.argumentString(options)+")"
     }
 
   // Gives you a JSON object that, if sent to the client, causes the function to be called with the args:
