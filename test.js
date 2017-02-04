@@ -2,6 +2,19 @@ var runTest = require("run-test")(require)
 
 
 runTest(
+  "currying arguments",
+  ["./"],
+  function(expect, done, functionCall) {
+    var call = functionCall("add").withArgs(1).withArgs(2)
+
+    expect(call.evalable()).to.equal("add(1, 2)")
+
+    done()
+  }
+)
+
+
+runTest(
   "raw arguments",
   ["./"],
   function(expect, done, functionCall) {

@@ -16,7 +16,7 @@ function generator() {
 
     this.binding = {
       identifier: identifier,
-      args: [],
+      args: args||[],
     }
 
     this.__isFunctionCallBinding = true
