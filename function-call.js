@@ -240,8 +240,10 @@ function generator() {
   functionCall.defineOn = function(bridge) {
     var binding = bridge.remember("function-call")
     if (binding) { return binding }
-    bridge.identifiers["functionCall"] = null
+
+    bridge.claimIdentifier("functionCall")
     binding = bridge.defineSingleton("functionCall", generator)
+
     bridge.see("function-call", binding)
     return binding
   }
