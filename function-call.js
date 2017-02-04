@@ -36,6 +36,8 @@ function generator() {
 
   function BoundBinding(boundFunc) {
     this.boundFunc = boundFunc
+    this.__isFunctionCallBinding = true
+    this.__isBoundBinding = true
   }
 
 
@@ -233,7 +235,12 @@ function generator() {
   }
 
   functionCall.defineOn = function(bridge) {
-    return bridge.defineSingleton("functionCall", generator)
+    var binding = bridge.remember("function-call")
+    if (binding) { return binding }
+    bridge.identifiers["functionCall"] = null
+    binding = bridge.defineSingleton("functionCall", generator)
+    bridge.see("function-call", binding)
+    return binding
   }
 
   return functionCall
