@@ -187,11 +187,11 @@ runTest(
 
 
 runTest(
-  "keeping bindings as bindings",
+  "passing function calls as calls to other functions",
   ["./"],
   function(expect, done, functionCall) {
 
-    var program = functionCall("program").asBinding()
+    var program = functionCall("program").asCall()
 
     expect(program.callable()).to.equal("functionCall(\"program\")")
 
@@ -203,13 +203,13 @@ runTest(
 
 
 runTest(
-  "singletons can be passed as bindings",
+  "singletons can be passed as calls",
   ["./"],
   function(expect, done, functionCall) {
 
     var otherBinding = functionCall("foo")
 
-    var program = functionCall("program").singleton().asBinding()
+    var program = functionCall("program").singleton().asCall()
 
     expect(program.callable()).to.equal("functionCall(\"program\").singleton()")
 

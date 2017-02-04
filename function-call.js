@@ -6,12 +6,12 @@ if (require) {
 
 function generator() {
 
-  function BoundFunc(identifier, args) {
+  function FunctionCall(identifier, args) {
 
     if (typeof identifier != "string") {
-      throw new Error("BoundFunc constructor takes an identifier as the first parameter")
+      throw new Error("FunctionCall constructor takes an identifier as the first parameter")
     } else if (typeof args != "undefined" && !Array.isArray(args)) {
-      throw new Error("Second argument to BoundFunc constructor should be an array, or omitted")
+      throw new Error("Second argument to FunctionCall constructor should be an array, or omitted")
     }
 
     this.identifier = identifier
@@ -21,25 +21,30 @@ function generator() {
     return this
   }
 
-  BoundFunc.prototype.methodCall = function(methodName) {
+  FunctionCall.prototype.methodCall = function(methodName) {
     var identifier = (this.isGenerator ? this.callable() : this.evalable())+"."+methodName
-    return new BoundFunc(identifier)
+    return new FunctionCall(identifier)
   }
 
-  BoundFunc.prototype.asBinding =
+  FunctionCall.prototype.asBinding =
     function() {
+      console.log("⚡⚡⚡ WARNING ⚡⚡⚡ functionCall.asBinding() is deprecated, use .asCall()")
+      return this.asCall()
+    }
+
+  FunctionCall.prototype.asCall = function() {
       return new BoundBinding(this)
     }
 
-  function BoundBinding(boundFunc) {
-    this.boundFunc = boundFunc
+  function BoundBinding(call) {
+    this.call = call
     this.__isFunctionCallBinding = true
     this.__isBoundBinding = true
   }
 
 
   BoundBinding.prototype.callable = function() {
-    var binding = this.boundFunc
+    var binding = this.call
 
     var source = "functionCall(\""+binding.identifier+"\")"
     var anyArgs = binding.args.length > 0
@@ -60,13 +65,13 @@ function generator() {
   }
 
   function clone(binding) {
-    return new BoundFunc(
+    return new FunctionCall(
       binding.identifier,
       [].concat(binding.args)
     )
   }
 
-  BoundFunc.prototype.withArgs =
+  FunctionCall.prototype.withArgs =
     function() {
       debugger
       var args = Array.prototype.slice.call(arguments)
@@ -78,7 +83,7 @@ function generator() {
       return newCall
     }
 
-  BoundFunc.prototype.singleton = function() {
+  FunctionCall.prototype.singleton = function() {
     var singleton = clone(this)
     singleton.isGenerator = true
     return singleton
@@ -86,7 +91,7 @@ function generator() {
 
   // Gives you a string that when evaled on the client, would cause the function to be called with the args:
 
-  BoundFunc.prototype.callable =
+  FunctionCall.prototype.callable =
     function() {
 
       if (this.isGenerator) {
@@ -118,7 +123,7 @@ function generator() {
         +")"
     }
 
-  BoundFunc.prototype.argumentString = function(options) {
+  FunctionCall.prototype.argumentString = function(options) {
     return argumentString(this.args, options)
   }
 
@@ -194,7 +199,7 @@ function generator() {
   }
 
 
-  BoundFunc.prototype.evalable =
+  FunctionCall.prototype.evalable =
     function(options) {
       return this.identifier+"("+this.argumentString(options)+")"
     }
@@ -203,7 +208,7 @@ function generator() {
 
   // Rename to ajaxResponse? #todo
 
-  BoundFunc.prototype.ajaxResponse =
+  FunctionCall.prototype.ajaxResponse =
     function() {
       return {
         evalable: this.evalable()
@@ -223,7 +228,7 @@ function generator() {
       }
     }
 
-    return new BoundFunc(identifier)
+    return new FunctionCall(identifier)
   }
 
   functionCall.raw = function(code) {
