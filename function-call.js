@@ -73,7 +73,6 @@ function generator() {
 
   FunctionCall.prototype.withArgs =
     function() {
-      debugger
       var args = Array.prototype.slice.call(arguments)
 
       var newCall = clone(this)
