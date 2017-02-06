@@ -31,7 +31,7 @@ me.methodCall("getName").withArgs("formal").evalable()
 
 ## These bindings are getting out of hand, what do I do?
 
-FunctionCall works great if you are mostly just passing literals to functions, but if you are calling functions and callbacks with serious dependencies, [browser-bridge](https://github.com/erikpukinskis/browser-bridge) can help.
+FunctionCall works great if you are mostly just passing literals to pure(ish) functions, but if you are calling functions and callbacks with serious dependencies, [browser-bridge](https://github.com/erikpukinskis/browser-bridge) can help.
 
 It allows you to bake dependencies into a function definition so your functionCalls stay sane:
 
