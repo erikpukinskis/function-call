@@ -5,6 +5,7 @@ var functionCall = require("function-call")
 
 var build = functionCall("buildTemple").withArgs({height: "30 cubits"})
 build.evalable()
+
 // 'buildTemple({"height":"30 cubits"})'
 ```
 
@@ -13,6 +14,7 @@ You can also keep tacking more arguments on to a function call. Arguments can be
 ```javascript
 var moveIn = functionCall("moveIn").withArgs("Tuesday")
 build.withArgs(moveIn).evalable()
+
 // 'buildTemple({"height":"30 cubits"}, moveIn.bind(null, "Tuesday"))'
 ```
 
@@ -23,6 +25,7 @@ If you want to reference an object or its methods:
 ```javascript
 var me = functionCall("me").singleton()
 me.methodCall("getName").withArgs("formal").evalable()
+
 // 'me.getName("formal")'
 ```
 
@@ -53,6 +56,7 @@ This will pre-bind a, b, b's args, and your data into a reference called c, so t
 
 ```javascript
 c.withArgs("goats").evalable()
+
 // 'c("goats")'
 ```
 
