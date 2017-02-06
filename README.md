@@ -6,7 +6,7 @@ var functionCall = require("function-call")
 var build = functionCall("buildTemple").withArgs({height: "30 cubits"})
 build.evalable()
 
-// 'buildTemple({"height":"30 cubits"})'
+// returns 'buildTemple({"height":"30 cubits"})'
 ```
 
 You can also keep tacking more arguments on to a function call. Arguments can be literals or other function calls:
@@ -15,7 +15,7 @@ You can also keep tacking more arguments on to a function call. Arguments can be
 var moveIn = functionCall("moveIn").withArgs("Tuesday")
 build.withArgs(moveIn).evalable()
 
-// 'buildTemple({"height":"30 cubits"}, moveIn.bind(null, "Tuesday"))'
+// returns 'buildTemple({"height":"30 cubits"}, moveIn.bind(null, "Tuesday"))'
 ```
 
 ## Singletons and methods
@@ -26,7 +26,7 @@ If you want to reference an object or its methods:
 var me = functionCall("me").singleton()
 me.methodCall("getName").withArgs("formal").evalable()
 
-// 'me.getName("formal")'
+// returns 'me.getName("formal")'
 ```
 
 ## These bindings are getting out of hand, what do I do?
@@ -57,7 +57,7 @@ This will pre-bind a, b, b's args, and your data into a reference called c, so t
 ```javascript
 c.withArgs("goats").evalable()
 
-// 'c("goats")'
+// returns 'c("goats")'
 ```
 
 When you eval that, `a` will be called, `b` will be called with 4000, and you'll get "datagoats" back.
