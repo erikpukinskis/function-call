@@ -179,7 +179,7 @@ function generator() {
       if (value && value.__isFunctionCallBinding) {
         var valueString = toCallable(value, expandJson)
       } else {
-        var valueString = JSON.stringify(value)
+        var valueString = JSON.stringify(value, null, expandJson ? 2 : null)
       }
 
       return JSON.stringify(key)+": "+valueString
