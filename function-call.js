@@ -179,7 +179,14 @@ function generator() {
       if (value && value.__isFunctionCallBinding) {
         var valueString = toCallable(value, expandJson)
       } else {
-        var valueString = JSON.stringify(value, null, expandJson ? 2 : null)
+
+        try {
+          var valueString = JSON.stringify(value, null, expandJson ? 2 : null)
+
+        } catch (e) {
+          throw new Error("There's something wrong with your object. We're trying to convert it to JSON: "+toString(value))
+        }
+
       }
 
       return JSON.stringify(key)+": "+valueString
@@ -195,6 +202,11 @@ function generator() {
     var closeBracket = "}"
 
     return openBracket+keyPairSource+closeBracket
+  }
+
+
+  function toString(val) {
+    return "[object constructed of "+val.constructor.name+" with keys: "+Object.keys(val).join(", ")+"]"
   }
 
 
