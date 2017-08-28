@@ -149,6 +149,7 @@ function generator() {
     var isFunction = typeof arg == "function"
     var isRawCode = arg && typeof arg.__nrtvFunctionCallRawCode == "string"
     var isObject = !isBinding && !isRawCode && typeof arg == "object"
+    var isArray = isObject && Array.isArray(arg)
 
     if (typeof arg == "undefined") {
       var source = "undefined"
@@ -160,6 +161,8 @@ function generator() {
       source = arg.toString()
     } else if (isRawCode) {
       source = arg.__nrtvFunctionCallRawCode
+    } else if (isArray) {
+      source = arrayToSource(arg, expandJson)
     } else if (isObject) {
       source = objectToSource(arg, expandJson)
     } else {
@@ -167,6 +170,18 @@ function generator() {
     }
 
     return source
+  }
+
+  function arrayToSource(arg, expandJson) {
+    try {
+      if (expandJson) {
+        return JSON.stringify(arg, null, 2)
+      } else {
+        return JSON.stringify(arg)
+      }
+    } catch (e) {
+      throw new Error("There's something wrong with the array you passed to functionCall.withArgs(). We're trying to convert it to JSON: "+arg.toString())
+    }
   }
 
   function objectToSource(arg, expandJson) {
@@ -184,7 +199,7 @@ function generator() {
           var valueString = JSON.stringify(value, null, expandJson ? 2 : null)
 
         } catch (e) {
-          throw new Error("There's something wrong with your object. We're trying to convert it to JSON: "+toString(value))
+          throw new Error("There's something wrong with the object you passed to functionCall.withArgs(). We're trying to convert it to JSON: "+toString(value))
         }
 
       }

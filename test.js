@@ -235,6 +235,18 @@ runTest(
 
 
 
+runTest(
+  "can pass arrays as arguments",
+  ["./"],
+  function(expect, done, functionCall) {
+    var call = functionCall("add").withArgs([1,2,3])
+
+    expect(call.evalable()).to.equal("add([1,2,3])")
+
+    done()
+  }
+)
+
 
 
 
