@@ -80,6 +80,40 @@ bridge.defineFunction(
 )
 ```
 
+## Globals and other manual references
+
+To reference `window` or `event` or similar as an argument:
+
+```javascript
+var js = functionCall("myFunc").withArgs(functionCall.raw("window").evalable()
+```
+
+The `raw` function is also available on the calls themselves:
+
+```javascript
+var add = functionCall("add")
+el.onclick = add.withArgs(add.raw("event")).evalable()
+```
+
+## Passing unbound function calls as references
+
+If you want to pass the function call object itself as an argument, and not the function it references, you can use the `.asCall` method:
+
+```javascript
+function addDay(chooseDay, dateString) {
+  var chooseButton = document.createElement("button")
+  chooseButton.setAttribute(
+    "onclick",
+    chooseDay.withArgs(dateString).evalable()
+  )
+}
+
+var addButton = document.createElement("button")
+addButton.setAttribute(
+  "onclick", functionCall("chooseDay").asCall()
+)
+```
+
 ## Why?
 
 Many JavaScript frameworks don't actually put onclick handlers in the DOM, which means it's difficult to see what happens when a button is pushed. 

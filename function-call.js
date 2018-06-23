@@ -42,6 +42,11 @@ function generator() {
     this.__isBoundBinding = true
   }
 
+  functionCall.raw = BoundBinding.prototype.raw = function(code) {
+    return {
+      __nrtvFunctionCallRawCode: code
+    }
+  }
 
   BoundBinding.prototype.callable = function() {
     var binding = this.call
@@ -131,6 +136,10 @@ function generator() {
   function argumentString(args, options) {
 
       var expandJson = !!(options && options.expand)
+
+      if (options && !expandJson) {
+        throw new Error("functionCall.evalable doesn't take any arguments... did you mean to do functionCall.withArgs(blah, blah, blah).evalable()?")
+      }
 
       var deps = []
 
@@ -255,12 +264,6 @@ function generator() {
     }
 
     return new FunctionCall(identifier)
-  }
-
-  functionCall.raw = function(code) {
-    return {
-      __nrtvFunctionCallRawCode: code
-    }
   }
 
   functionCall.defineOn = function(bridge) {
