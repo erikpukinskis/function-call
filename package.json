@@ -1,6 +1,6 @@
 {
   "name": "function-call",
-  "version": "0.37.0",
+  "version": "0.38.0",
   "description": "build code that defines and calls functions in the browser",
   "main": "function-call.js",
   "repository": {
