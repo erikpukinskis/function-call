@@ -97,25 +97,6 @@ el.onclick = add.withArgs(add.raw("event")).evalable()
 // sets onclick to 'add(event)'
 ```
 
-## Passing unbound function calls as references
-
-If you want to pass the function call object itself as an argument, and not the function it references, you can use the `.asCall` method:
-
-```javascript
-function addDay(chooseDay, dateString) {
-  var chooseButton = document.createElement("button")
-  chooseButton.setAttribute(
-    "onclick",
-    chooseDay.withArgs(dateString).evalable()
-  )
-}
-
-var addButton = document.createElement("button")
-addButton.setAttribute(
-  "onclick", functionCall("chooseDay").asCall()
-)
-```
-
 ## Why?
 
 Many JavaScript frameworks don't actually put onclick handlers in the DOM, which means it's difficult to see what happens when a button is pushed. 
