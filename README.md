@@ -101,8 +101,8 @@ el.onclick = add.withArgs(add.raw("event")).evalable()
 
 ## Why?
 
-Many JavaScript frameworks don't actually put onclick handlers in the DOM, which means it's difficult to see what happens when a button is pushed. 
+ - Many JavaScript frameworks don't actually put onclick handlers in the DOM, which means it's difficult to see what happens when a button is pushed. 
 
-Even if you can figure out what the event handler is, it often plumbs straight into framework internals.
+ - Even if you can figure out what the event handler is, it often plumbs straight into framework internals.
 
-FunctionCall allows you to put human-readable, irrefutable JavaScript strings into your HTML so that you can see exactly what's going on and debug problems.
+ - FunctionCall allows you to put human-readable, irrefutable JavaScript strings into your HTML so that you can see exactly what's going on and debug problems.
