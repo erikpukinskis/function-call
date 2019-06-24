@@ -86,6 +86,7 @@ To reference `window` or `event` or similar as an argument:
 
 ```javascript
 var js = functionCall("myFunc").withArgs(functionCall.raw("window")).evalable()
+
 // returns 'myFunc(window)'
 ```
 
@@ -94,6 +95,7 @@ The `raw` function is also available on the calls themselves:
 ```javascript
 var add = functionCall("add")
 el.onclick = add.withArgs(add.raw("event")).evalable()
+
 // sets onclick to 'add(event)'
 ```
 
