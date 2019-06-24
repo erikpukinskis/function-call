@@ -64,7 +64,7 @@ When you eval that, `a` will be called, `b` will be called with 4000, and you'll
 
 ## Using bindings in the browser
 
-Sometimes you want to use a bridge function again in response to a javascript event or something. Use .asBinding() to get a binding of the binding, so to speak.
+Sometimes you want to use a bridge function again in response to a javascript event or something. Use `.asCall()` to get a binding of the binding, so to speak.
 
 ```javascript
 var sayHi = bridge.defineFunction(function(name) {
@@ -72,7 +72,7 @@ var sayHi = bridge.defineFunction(function(name) {
 })
 
 bridge.defineFunction(
-  [sayHi.asBinding()],
+  [sayHi.asCall()],
   function(sayHi) {
     var name = askTheSpiritsBeyond.whoAmi()
     someElement.onclick = sayHi.withArgs(name).evalable()
