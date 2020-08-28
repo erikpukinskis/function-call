@@ -1,5 +1,17 @@
 var runTest = require("run-test")(require)
 
+runTest(
+  "typed arrays",
+  ["./"],
+  function(expect, done, functionCall) {
+    var call = functionCall("add").withArgs(new Float32Array([1,2,3]))
+
+    expect(call.evalable()).to.equal("add(new Float32Array([1,2,3]))")
+
+    done()
+  }
+)
+
 
 runTest(
   "currying arguments",

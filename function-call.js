@@ -17,7 +17,7 @@ function generator() {
     this.identifier = identifier
     this.args = args||[]
     this.__isFunctionCallBinding = true
-    
+
     return this
   }
 
@@ -153,12 +153,13 @@ function generator() {
   }
 
   function toCallable(arg, expandJson) {
-  
+
     var isBinding = arg && arg.__isFunctionCallBinding
     var isFunction = typeof arg == "function"
     var isRawCode = arg && typeof arg.__nrtvFunctionCallRawCode == "string"
     var isObject = !isBinding && !isRawCode && typeof arg == "object"
     var isArray = isObject && Array.isArray(arg)
+    var isFloat32Array = isObject && arg.constructor.name === "Float32Array"
 
     if (typeof arg == "undefined") {
       var source = "undefined"
@@ -172,6 +173,8 @@ function generator() {
       source = arg.__nrtvFunctionCallRawCode
     } else if (isArray) {
       source = arrayToSource(arg, expandJson)
+    } else if (isFloat32Array) {
+      source = "new Float32Array(["+arg.join(",")+"])"
     } else if (isObject) {
       source = objectToSource(arg, expandJson)
     } else {
