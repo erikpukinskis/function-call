@@ -104,10 +104,6 @@ function generator() {
 
       var arguments = this.argumentString()
 
-      if (arguments.length < 1) {
-        return this.identifier
-      }
-
 
       var pattern = /(.+)[.]([a-zA-Z0-9_-]+)$/
 
@@ -119,12 +115,18 @@ function generator() {
         var scope = "null"
       }
 
-      return this.identifier
-        +".bind("
-        +scope
-        +", "
-        +arguments
-        +")"
+      if (arguments.length < 1 && method) {
+        return this.identifier+".bind("+scope+")"
+      } else if (arguments.length < 1) {
+        return this.identifier
+      } else {
+        return this.identifier
+          +".bind("
+          +scope
+          +", "
+          +arguments
+          +")"
+      }
     }
 
   FunctionCall.prototype.argumentString = function(options) {

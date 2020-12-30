@@ -157,6 +157,21 @@ runTest(
 
 
 runTest(
+  "bind methods to their instance when used used as a dependency",
+  ["."],
+  function(expect, done, functionCall) {
+    var methodCall = functionCall("myInstance").singleton().methodCall("myMethod")
+
+    expect(methodCall.callable()).to.equal(
+      "myInstance.myMethod.bind(myInstance)")
+
+    done()
+  }
+)
+
+
+
+runTest(
   "don't bind functions to themselves",
   ["./"],
   function(expect, done, functionCall) {
