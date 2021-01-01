@@ -159,7 +159,7 @@ function generator() {
     var isBinding = arg && arg.__isFunctionCallBinding
     var isFunction = typeof arg == "function"
     var isRawCode = arg && typeof arg.__nrtvFunctionCallRawCode == "string"
-    var isObject = !isBinding && !isRawCode && typeof arg == "object"
+    var isObject = arg !== null && !isBinding && !isRawCode && typeof arg == "object"
     var isArray = isObject && Array.isArray(arg)
     var isFloat32Array = isObject && arg.constructor.name === "Float32Array"
 
@@ -284,4 +284,3 @@ function generator() {
 
   return functionCall
 }
-

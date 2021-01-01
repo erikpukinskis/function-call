@@ -1,6 +1,19 @@
 var runTest = require("run-test")(require)
 
 runTest(
+  "null arguments are OK",
+  ["./"],
+  function(expect, done, functionCall) {
+    var call = functionCall("isNull").withArgs(null)
+
+    expect(call.evalable()).to.equal("isNull(null)")
+
+    done()
+  }
+)
+
+
+runTest(
   "typed arrays",
   ["./"],
   function(expect, done, functionCall) {
