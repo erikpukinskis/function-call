@@ -203,21 +203,7 @@ function generator() {
     var keyPairStrings = Object.keys(arg).map(toPairString)
 
     function toPairString(key) {
-      var value = arg[key]
-
-      if (value && value.__isFunctionCallBinding) {
-        var valueString = toCallable(value, expandJson)
-      } else {
-
-        try {
-          var valueString = JSON.stringify(value, null, expandJson ? 2 : null)
-
-        } catch (e) {
-          throw new Error("There's something wrong with the object you passed to functionCall.withArgs(). We're trying to convert it to JSON: "+toString(value))
-        }
-
-      }
-
+      var valueString = toCallable(arg[key], false)
       return JSON.stringify(key)+": "+valueString
     }
 

@@ -25,6 +25,20 @@ runTest(
   }
 )
 
+runTest(
+  "objects with typed arrays in their attributes",
+  ["./"],
+  function(expect, done, functionCall) {
+    var call = functionCall("add").withArgs({
+      color: new Float32Array([1,2,3,4])
+    })
+
+    expect(call.evalable()).to.equal("add({\"color\": new Float32Array([1,2,3,4])})")
+
+    done()
+  }
+)
+
 
 runTest(
   "currying arguments",
